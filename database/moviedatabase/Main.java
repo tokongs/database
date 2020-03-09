@@ -1,7 +1,5 @@
 package moviedatabase;
 
-import moviedatabase.DBConnection;
-
 public class Main {
 
   public static void main(String[] args) {

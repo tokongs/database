@@ -33,8 +33,8 @@ public abstract class Employee extends ActiveDomainObject {
   public void save(Connection conn) {
     try {
       Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("update Employee set name=" + name + ", birthYear=" + birthYear
-          + ", originCountry=" + originCountry + " where employeeId=" + employeeId);
+      stmt.executeQuery("UPDATE Employee set Name=" + name + ", BirthYear=" + birthYear
+          + ", OriginCountry=" + originCountry + " where EmployeeId=" + employeeId);
     } catch (Exception e) {
       System.out.println("db error during update of employee with id: " + employeeId + e);
       return;
