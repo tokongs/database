@@ -7,6 +7,9 @@ package moviedatabase;
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import moviedatabase.Media.Type;
 
 public class Actor extends Employee {
 
@@ -21,10 +24,9 @@ public class Actor extends Employee {
     return roles;
   }
 
-  public ArrayList<Movie> getMovies(final Connection connection) {
-    ArrayList<Movie> movies = new ArrayList<Movie>();
-    mediaIds.forEach(id -> movies.add(new Movie(id)));
-    return movies;
+  public ArrayList<Media> getMovies(final Connection connection) {
+    return mediaIds.stream().map(id -> new Media(id)).filter(media -> media.getType() == Type.MOVIE)
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   public void initialize(final Connection connection) {
