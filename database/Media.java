@@ -1,4 +1,4 @@
-package avtalebok;
+package moviedatabase
 
 /**
  *
@@ -29,10 +29,10 @@ public class Media extends ActiveDomainObject {
     try {
       Statement stmt = connection.createStatement();
       ResultSet rs =
-          stmt.executeQuery("select title, length, publicationYear, launchDate, description where mediaId=" + mediaId);
+          stmt.executeQuery("SELECT title, length, publicationYear, launchDate, description FROM Media where MediaId=" + mediaId);
       while (rs.next()) {
-        title = rs.getString("navn");
-        length = rs.getString("epost");
+        title = rs.getString("title");
+        length = rs.getString("length");
         publicationYear = rs.getString("publicationYear");
         launchDate = rs.getDate("launchDate");
         description = rs.getString("description");
@@ -40,7 +40,7 @@ public class Media extends ActiveDomainObject {
       }
 
     } catch (Exception e) {
-      System.out.println("db error during select of bruker= " + e);
+      System.out.println("db error during select of media with id: " + mediaId+ e);
       return;
     }
 
@@ -53,11 +53,11 @@ public class Media extends ActiveDomainObject {
   public void save(Connection conn) {
     try {
       Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("update Bruker set title=" + title + ", length=" + length
+      ResultSet rs = stmt.executeQuery("UPDATE Media SET title=" + title + ", length=" + length
           + ", publicationYear=" + publicationYear +  ", launchDate=" + launchDate + ", description=" 
-          + description + " where mediaId=" + mediaId);
+          + description + " WHERE mediaId=" + mediaId);
     } catch (Exception e) {
-      System.out.println("db error during update of bruker=" + e);
+      System.out.println("db error during updat of media with id: " + mediaId + e);
       return;
     }
   }
