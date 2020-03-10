@@ -1,4 +1,4 @@
-package moviedatabase
+package moviedatabase;
 
 /**
  *
