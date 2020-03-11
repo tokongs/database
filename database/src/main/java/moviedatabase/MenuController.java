@@ -1,6 +1,8 @@
 package src.main.java.moviedatabase;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -43,7 +45,7 @@ public class MenuController {
 
   }
 
-  private Genre genreMenu(){
+  private Genre genreMenu() {
     int j = 0;
     while (true) {
       Genre genre = new Genre(j);
@@ -70,6 +72,23 @@ public class MenuController {
     }
   }
 
+  public int countMoviesPerCompany(Genre genre) {
+    try {
+      Statement stmt = connection.createStatement();
+      ResultSet rs = stmt.executeQuery("SELECT MAX(COUNT(CompanyID)) FROM " + 
+      "((Genre INNER JOIN MediasIsGenre ON Genre.GenreId=MediaIsGenre.GenreId) " + 
+      "INNER JOIN Media ON MediaIsGenre.MediaId=Media.MediaId)genreId "+
+      "where GenreId =" + genre.getGenreId());
+      while (rs.next()) {
+        return rs.getInt("CompanyId");
+      }
+      return 0;
+    } catch (Exception e) {
+      System.out.println("db error during counting" + e);
+      return 0;
+    }
+  }
+
   public void mainMenu() {
     System.out.println("1: Find roles of an actor");
     System.out.println("2: Find movies an actor is in");
@@ -91,7 +110,7 @@ public class MenuController {
         break;
       case 3:
         Genre genre = genreMenu();
-        
+        System.out.println(countMoviesPerCompany(genre));
         break;
       case 4:
         break;
