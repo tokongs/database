@@ -18,7 +18,7 @@ public class Media extends ActiveDomainObject {
 
   private int mediaId;
   private String title;
-  private String length;
+  private int length;
   private String publicationYear;
   private Date launchDate;
   private String description;
@@ -29,6 +29,10 @@ public class Media extends ActiveDomainObject {
     this.mediaId = mediaId;
   }
 
+  public Media(String title, int length){
+      this.title = title;
+      this.length = length;
+  };
   public int getMediaId() {
     return mediaId;
   }
@@ -41,7 +45,7 @@ public class Media extends ActiveDomainObject {
               + mediaId);
       while (rs.next()) {
         title = rs.getString("Title");
-        length = rs.getString("Length");
+        length = rs.getInt("Length");
         publicationYear = rs.getString("PublicationYear");
         launchDate = rs.getDate("LaunchDate");
         description = rs.getString("Description");
