@@ -1,4 +1,4 @@
-package moviedatabase
+package src.main.java.moviedatabase;
 
 /**
  *
@@ -23,6 +23,7 @@ public class Media extends ActiveDomainObject {
   private Date launchDate;
   private String description;
   private Type type;
+  private int companyId;
   private String genre;
 
   public Media(int mediaId) {
@@ -33,11 +34,15 @@ public class Media extends ActiveDomainObject {
     return mediaId;
   }
 
+  public String getGenre(){
+    return genre;
+  }
+
   public void initialize(Connection connection) {
     try {
       Statement stmt = connection.createStatement();
       ResultSet rs = stmt.executeQuery(
-          "SELECT Title, Length, PublicationYear, LaunchDate, Description FROM Media WHERE MediaId="
+          "SELECT Title, Length, PublicationYear, LaunchDate, Description, CompanyId,  FROM Media WHERE MediaId="
               + mediaId);
       while (rs.next()) {
         title = rs.getString("Title");
@@ -45,6 +50,21 @@ public class Media extends ActiveDomainObject {
         publicationYear = rs.getString("PublicationYear");
         launchDate = rs.getDate("LaunchDate");
         description = rs.getString("Description");
+        companyId = rs.getInt("CompanyId");
+      }
+
+    } catch (Exception e) {
+      System.out.println("db error during select of media with id: " + mediaId + e);
+      return;
+    }
+
+    try {
+      Statement stmt = connection.createStatement();
+      ResultSet rs = stmt.executeQuery(
+          "SELECT Name FROM ((Media INNER JOIN MediaIsGenre ON Media.MediaId=MediaIsGenre.MediaId) INNER JOIN Genre ON MediaIsGenre.GenerId=Genre.GenreId) WHERE MediaId="
+              + mediaId);
+      while (rs.next()) {
+        genre = rs.getString("Name");
       }
 
     } catch (Exception e) {

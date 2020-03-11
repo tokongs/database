@@ -1,4 +1,4 @@
-package moviedatabase;
+package src.main.java.moviedatabase;
 
 /**
  *
@@ -18,6 +18,10 @@ public abstract class Employee extends ActiveDomainObject {
 
   public Employee(int employeeId) {
     this.employeeId = employeeId;
+  }
+
+  public String getName(){
+    return name;
   }
 
   public int getEmployeeId() {
