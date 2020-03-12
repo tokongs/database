@@ -44,7 +44,7 @@ task fatJar(type: Jar) {
 	manifest {
         attributes 'Implementation-Title': 'MovieDatabase',  
         	'Implementation-Version': version,
-        	'Main-Class': 'com.mkyong.DateUtils'
+        	'Main-Class': 'moviedatabase.Main'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
