@@ -35,7 +35,7 @@ public class Review {
             }
 
         } catch (Exception e) {
-            System.out.println("db error during select of media with id: " + mediaId + e);
+            System.out.println("db error during select of media with id: " + ReviewID + e);
             return;
         }
     }
@@ -55,7 +55,7 @@ public class Review {
             System.out.println("SeriesID of the series");
             SeriesID = sc.nextInt();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("INSERT INTO Review(Text, Rating, UserID, MediaID, Number, SeriesID) VALUES(" + Text + ", " + Rating + ", " + UserID + ", " + MediaID + ", " + Number + ", " + SeriesID + ")");
+            stmt.executeUpdate("INSERT INTO Review(Text, Rating, UserID, MediaID, Number, SeriesID) VALUES(" + Text + ", " + Rating + ", " + UserID + ", " + MediaID + ", " + Number + ", " + SeriesID + ")");
           } catch (Exception e) {
             System.out.println("db error during insert" + e);
             return;
