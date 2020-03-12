@@ -1,10 +1,5 @@
 package moviedatabase;
 
-/**
- *
- * @author sveinbra
- */
-
 import java.sql.*;
 
 public class Writer extends Employee {
