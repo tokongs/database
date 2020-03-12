@@ -12,6 +12,7 @@ public class MenuController {
   private ArrayList<Genre> genres = new ArrayList<Genre>();
   Connection connection;
   Scanner sc;
+
   public MenuController(Connection connection) {
     this.connection = connection;
     sc = new Scanner(System.in);
@@ -56,14 +57,17 @@ public class MenuController {
     while (true) {
       Genre genre = new Genre(j);
       genre.initialize(connection);
-      if (genre.getName().isEmpty()) {
+      if (genre.getName() == null) {
         break;
       }
       genres.add(genre);
       j++;
     }
 
-
+    if (genres.isEmpty()) {
+      System.out.println("No genres!");
+      return null;
+    }
 
     while (true) {
       System.out.println("Choose genre!");
@@ -78,19 +82,21 @@ public class MenuController {
     }
   }
 
-  public int countMoviesPerCompany(Genre genre) {
+  public String countMoviesPerCompany(Genre genre) {
     try {
       Statement stmt = connection.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT MAX(COUNT(CompanyID)) FROM "
-          + "((Genre INNER JOIN MediasIsGenre ON Genre.GenreId=MediaIsGenre.GenreId) "
-          + "INNER JOIN Media ON MediaIsGenre.MediaId=Media.MediaId)genreId " + "where GenreId =" + genre.getGenreId());
+      ResultSet rs = stmt.executeQuery("SELECT Genre.GenreID, Company.Name, COUNT(Company.CompanyID) AS occurence FROM "
+          + "(((Genre INNER JOIN MediaIsGenre ON Genre.GenreID=MediaIsGenre.GenreID) "
+          + "INNER JOIN Media ON MediaIsGenre.MediaID=Media.MediaID) "
+          + "INNER JOIN Company ON Media.CompanyID=Company.CompanyID) " + "WHERE Genre.GenreID=" + genre.genreId
+          + " ORDER BY occurence DESC " + "LIMIT 1");
       while (rs.next()) {
-        return rs.getInt("CompanyId");
+        return rs.getString("Name");
       }
-      return 0;
+      return "";
     } catch (Exception e) {
       System.out.println("db error during counting" + e);
-      return 0;
+      return "";
     }
   }
 
@@ -117,6 +123,8 @@ public class MenuController {
         break;
       case 3:
         Genre genre = genreMenu();
+        if (genre == null)
+          break;
         System.out.println(countMoviesPerCompany(genre));
         break;
       case 4:
