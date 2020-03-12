@@ -9,22 +9,21 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-
 public class Media extends ActiveDomainObject {
 
   public enum Type {
     MOVIE, SERIES
   }
 
-  private int mediaId;
-  private String title;
-  private String length;
-  private String publicationYear;
-  private Date launchDate;
-  private String description;
-  private Type type;
-  private int companyId;
-  private String genre;
+  public int mediaId;
+  public String title;
+  public String length;
+  public String publicationYear;
+  public Date launchDate;
+  public String description;
+  public Type type;
+  public int companyId;
+  public String genre;
 
   public Media(int mediaId) {
     this.mediaId = mediaId;
@@ -34,7 +33,7 @@ public class Media extends ActiveDomainObject {
     return mediaId;
   }
 
-  public String getGenre(){
+  public String getGenre() {
     return genre;
   }
 
@@ -74,8 +73,7 @@ public class Media extends ActiveDomainObject {
 
     try {
       Statement stmt = connection.createStatement();
-      ResultSet rs = stmt.executeQuery(
-          "SELECT Count(MediaId) AS count FROM SeasonHasEpisode where MediaId=" + mediaId);
+      ResultSet rs = stmt.executeQuery("SELECT Count(MediaId) AS count FROM SeasonHasEpisode where MediaId=" + mediaId);
       while (rs.next()) {
         if (rs.getInt("count") == 0)
           type = Type.MOVIE;
@@ -94,12 +92,29 @@ public class Media extends ActiveDomainObject {
     initialize(conn);
   }
 
+  public void insert(Connection conn) {
+    try {
+      String sql = "INSERT INTO Media(Title, Length, PublicationYear, LaunchDate, description, CompanyID) "
+          + "VALUES(\"" + title + "\", \"" + length + "\", \"" + publicationYear + "\", \"" + launchDate.toString()
+          + "\", \"" + description + "\", \"" + companyId + "\")";
+      PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      mediaId = rs.getInt(1);
+
+    } catch (Exception e) {
+      System.out.println("db error during insert of media with id:" + e);
+      return;
+    }
+  }
+
   public void save(Connection conn) {
     try {
       Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("UPDATE Media SET Title=" + title + ", Length=" + length
-          + ", PublicationYear=" + publicationYear + ", LaunchDate=" + launchDate + ", Description="
-          + description + " WHERE MediaId=" + mediaId);
+      ResultSet rs = stmt.executeQuery(
+          "UPDATE Media SET Title=" + title + ", Length=" + length + ", PublicationYear=" + publicationYear
+              + ", LaunchDate=" + launchDate + ", Description=" + description + " WHERE MediaId=" + mediaId);
     } catch (Exception e) {
       System.out.println("db error during updat of media with id: " + mediaId + e);
       return;
