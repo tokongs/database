@@ -1,10 +1,5 @@
 package moviedatabase;
 
-/**
- *
- * @author sveinbra
- */
-
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collector;
