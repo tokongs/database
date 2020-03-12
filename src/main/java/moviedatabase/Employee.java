@@ -1,16 +1,11 @@
 package moviedatabase;
 
-/**
- *
- * @author sveinbra
- */
-
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
 public abstract class Employee extends ActiveDomainObject {
-  protected int employeeId;
+  public int employeeId;
   public String name;
   public String birthYear;
   public String originCountry;
@@ -36,8 +31,8 @@ public abstract class Employee extends ActiveDomainObject {
 
   public void insert(Connection conn) {
     try {
-      String sql = "INSERT INTO Employee(Name, BirthYear, OriginCountry) " + "VALUES(" + name + ", "
-          + birthYear + ", " + originCountry + ")";
+      String sql = "INSERT INTO Employee(Name, BirthYear, OriginCountry) " + "VALUES(\"" + name + "\", \""
+          + birthYear + "\", \"" + originCountry + "\")";
       PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
@@ -50,7 +45,6 @@ public abstract class Employee extends ActiveDomainObject {
     }
   }
 
-  }
 
   public void save(Connection conn) {
     try {

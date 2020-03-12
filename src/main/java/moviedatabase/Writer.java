@@ -1,11 +1,16 @@
 package moviedatabase;
 
+/**
+ *
+ * @author sveinbra
+ */
+
 import java.sql.*;
 
-public class Director extends Employee {
+public class Writer extends Employee {
 
 
-  public Director(final int employeeId) {
+  public Writer(final int employeeId) {
     super(employeeId);
   }
 
@@ -13,7 +18,7 @@ public class Director extends Employee {
     try {
       final Statement stmt = connection.createStatement();
       final ResultSet rs = stmt.executeQuery(
-          "SELECT * FROM (Employee INNER JOIN EmployeeDirected ON Employee.EmployeeID=EmployeeDirected.EmployeeID) WHERE Employee.EmployeeID="
+          "SELECT * FROM (Employee INNER JOIN EmployeeWrote ON Employee.EmployeeID=EmployeeWrote.EmployeeID) WHERE Employee.EmployeeID="
               + employeeId);
       while (rs.next()) {
         name = rs.getString("Name");
@@ -22,7 +27,7 @@ public class Director extends Employee {
       }
 
     } catch (final Exception e) {
-      System.out.println("db error during select of Director with id: " + employeeId + e);
+      System.out.println("db error during select of Writer with id: " + employeeId + e);
       return;
     }
   }
