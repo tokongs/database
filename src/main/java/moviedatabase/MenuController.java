@@ -130,6 +130,8 @@ public class MenuController {
       case 4:
         break;
       case 5:
+        Review review = new Review();
+        review.insert(this.connection, this.sc);
         break;
     }
   }
