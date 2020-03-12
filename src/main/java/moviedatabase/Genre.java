@@ -29,7 +29,7 @@ public class Genre extends ActiveDomainObject {
   public void initialize(Connection connection) {
     try {
       Statement stmt = connection.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT Name FROM Genre WHERE GenerId=" + genreId);
+      ResultSet rs = stmt.executeQuery("SELECT Name FROM Genre WHERE GenreID=" + genreId);
       while (rs.next()) {
         name = rs.getString("Name");
       }
