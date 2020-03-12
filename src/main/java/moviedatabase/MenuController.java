@@ -85,11 +85,12 @@ public class MenuController {
   public String countMoviesPerCompany(Genre genre) {
     try {
       Statement stmt = connection.createStatement();
-      ResultSet rs = stmt.executeQuery("SELECT Genre.GenreID, Company.Name, COUNT(Company.CompanyID) AS occurence FROM "
-          + "(((Genre INNER JOIN MediaIsGenre ON Genre.GenreID=MediaIsGenre.GenreID) "
-          + "INNER JOIN Media ON MediaIsGenre.MediaID=Media.MediaID) "
-          + "INNER JOIN Company ON Media.CompanyID=Company.CompanyID) " + "WHERE Genre.GenreID=" + genre.genreId
-          + " ORDER BY occurence DESC " + "LIMIT 1");
+      ResultSet rs = stmt.executeQuery(
+          "SELECT Genre.GenreID, Company.Name, COUNT(Company.CompanyID) AS occurence FROM "
+              + "(((Genre INNER JOIN MediaIsGenre ON Genre.GenreID=MediaIsGenre.GenreID) "
+              + "INNER JOIN Media ON MediaIsGenre.MediaID=Media.MediaID) "
+              + "INNER JOIN Company ON Media.CompanyID=Company.CompanyID) " + "WHERE Genre.GenreID="
+              + genre.genreId + " ORDER BY occurence DESC " + "LIMIT 1");
       while (rs.next()) {
         return rs.getString("Name");
       }
@@ -98,6 +99,69 @@ public class MenuController {
       System.out.println("db error during counting" + e);
       return "";
     }
+  }
+
+  public void insertMoviewMenu() {
+    System.out.print("Title: ");
+    String title = sc.next();
+    System.out.print("Length: ");
+    String length = sc.next();
+    System.out.print("PublicationYear: ");
+    String publicationYear = sc.next();
+    System.out.print("Launch year: ");
+    String launchYear = sc.next();
+    System.out.print("Launch month: ");
+    String launchMonth = sc.next();
+    System.out.print("Launch day: ");
+    String launchDay = sc.next();
+    System.out.print("Description: ");
+    String description = sc.next();
+
+    Director director = selectDirectorMenu();
+  }
+
+  public Director selectDirectorMenu() {
+    ArrayList<Director> directors = new ArrayList<>();
+    int j = 1;
+    while (true) {
+      Director director = new Director(j);
+      director.initialize(connection);
+      if (director.getName() == null) {
+        break;
+      }
+      directors.add(director);
+      j++;
+    }
+
+    if (directors.isEmpty()) {
+      System.out.println("There are no directors!");
+      return null;
+    }
+
+    while (true) {
+      System.out.println("Choose director!");
+      for (int i = 0; i < directors.size(); i++) {
+        System.out.println(i + ": " + directors.get(i).getName());
+      }
+        System.out.println(directors.size() + ": Insert new direcor");
+      int director = sc.nextInt();
+      if (director >= 0 && director < directors.size()) {
+        return directors.get(director);
+      } else if (director == directors.size()){
+        return insertDirectorMenu();
+      }
+    }
+  }
+
+  private Director insertDirectorMenu(){
+    Director dir = new Director(0);
+    System.out.print("Name: ");
+    dir.name = sc.next();
+    System.out.print("Birth Year: ");
+    dir.birthYear = sc.next();
+    System.out.print("Origin Country: ");
+    dir.originCountry = sc.next();
+    return dir;
   }
 
   public void mainMenu() {
@@ -128,6 +192,7 @@ public class MenuController {
         System.out.println(countMoviesPerCompany(genre));
         break;
       case 4:
+        insertMoviewMenu();
         break;
       case 5:
         break;
