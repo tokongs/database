@@ -1,4 +1,4 @@
-package src.main.java.moviedatabase;
+package moviedatabase;
 
 /**
  *
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import src.main.java.moviedatabase.Media.Type;
+import moviedatabase.Media.Type;
 
 public class Actor extends Employee {
 
@@ -38,7 +38,7 @@ public class Actor extends Employee {
     try {
       final Statement stmt = connection.createStatement();
       final ResultSet rs = stmt.executeQuery(
-          "SELECT * FROM (Employee INNER JOIN EmployeeActs ON Employee.EmployeeId=EmployeeActs.EmployeeId) WHERE EmployeeId="
+          "SELECT * FROM (Employee INNER JOIN EmployeeActs ON Employee.EmployeeID=EmployeeActs.EmployeeID) WHERE Employee.EmployeeID="
               + employeeId);
       while (rs.next()) {
         name = rs.getString("Name");
@@ -56,10 +56,9 @@ public class Actor extends Employee {
       final Statement stmt = connection.createStatement();
       final ResultSet rs = stmt.executeQuery(
           "SELECT Title FROM "+
-          "(((Employee INNER JOIN EmployeeActs ON Employee.EmployeeId=EmployeeActs.EmployeeId)" +
-          "INNER Media ON EmployeeActs.MediaId=Media.MediaId)" +
-          "INNER JOIN SeasonHasEpiosde ON Media.MediaId=SeasonHasEpisode.MediaId WHERE SeasonHasEpisode.MediaId IS NULL)"+
-          "where EmployeeId="
+          "((Employee INNER JOIN EmployeeActs ON Employee.EmployeeId=EmployeeActs.EmployeeId)" +
+          "INNER JOIN Media ON EmployeeActs.MediaId=Media.MediaId)" +
+          "WHERE Media.MediaID NOT IN (SELECT MediaID FROM SeasonHasEpisode) AND Employee.EmployeeID="
               + employeeId);
       while (rs.next()) {
         movies.add(rs.getString("Title"));

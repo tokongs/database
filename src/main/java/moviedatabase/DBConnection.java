@@ -1,4 +1,4 @@
-package src.main.java.moviedatabase;
+package moviedatabase;
 
 import java.sql.*;
 import java.util.Properties;
